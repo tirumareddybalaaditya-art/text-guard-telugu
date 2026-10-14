@@ -60,13 +60,13 @@ export function scan(t: string): Result {
   while ((m = re.exec(t))) {
     const u = m[0].replace(/[.,;)\]!?]+$/, "");
     hasL = true; rg.push([m.index, m.index + u.length, true]);
-    const h = u.replace(/^https?:\/\//i, "").split(/[/?#]/)[0].toLowerCase().replace(/^www\./, "");
+    const h = (u.replace(/^https?:\/\//i, "").split(/[/?#]/)[0] ?? "").toLowerCase().replace(/^www\./, "");
     const ks: string[] = [];
     if (SHORT.includes(h)) ks.push("short");
     if (TLD.test(h)) ks.push("tld");
     if (/^http:\/\//i.test(u)) ks.push("http");
-    for (const b in BR) if (h.includes(b) && !BR[b].some((d) => h === d || h.endsWith("." + d))) ks.push("brand");
-    ks.forEach((k) => { const x = LF[k]; fl.push({ w: x.w, en: `“${h}” ${x.en}`, te: `“${h}” ${x.te}` }); if (!seen[k]) { seen[k] = 1; sc += x.w; } });
+    for (const b in BR) if (h.includes(b) && !BR[b]!.some((d) => h === d || h.endsWith("." + d))) ks.push("brand");
+    ks.forEach((k) => { const x = LF[k]!; fl.push({ w: x.w, en: `“${h}” ${x.en}`, te: `“${h}” ${x.te}` }); if (!seen[k]) { seen[k] = 1; sc += x.w; } });
   }
   if (hasL && keys[1]) sc += 10;
   if (keys[7] && (keys[1] || keys[2] || keys[5])) sc += 10;
